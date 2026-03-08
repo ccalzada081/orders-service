@@ -360,3 +360,21 @@ Orders Service depends on **Products Service**.
 Products Service must be running for order creation to work locally.
 
 This service demonstrates **microservice-to-microservice communication using REST**.
+
+---
+
+## Integration Tests
+
+This project includes integration tests between Orders Service and Products Service.
+
+The integration test verifies the full flow:
+
+1. Create a product
+2. Create an order using that product
+3. Validate stock with Products Service
+4. Confirm order
+5. Verify stock decrease
+
+Run integration tests:
+
+npm run integration:test
