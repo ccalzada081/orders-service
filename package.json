@@ -7,7 +7,8 @@
   "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
   "build": "tsc",
   "start": "node dist/src/app.js",
-  "test": "jest --coverage"
+  "test": "jest --coverage",
+  "integration:test": "jest tests/integration/orders-products.integration.test.ts --runInBand"
 },
   "keywords": [],
   "author": "",
