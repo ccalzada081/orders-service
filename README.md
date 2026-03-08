@@ -53,20 +53,42 @@ orders-service
 ├── package.json
 ├── tsconfig.json
 └── Orders Service API.postman_collection.json
-Environment Variables
+```
 
-Create a .env file in the root of the project:
+---
 
+## Environment Variables
+
+Create a `.env` file in the root of the project.
+
+```env
 PORT=3002
 AWS_REGION=us-east-1
 ORDERS_TABLE=Orders
 PRODUCTS_BASE_URL=http://localhost:3001
-DynamoDB Table
-Table name
+```
+
+---
+
+## DynamoDB Table
+
+### Table name
+
+```
 Orders
-Partition key
+```
+
+### Partition key
+
+```
 id (String)
-Order model
+```
+
+---
+
+## Order Model
+
+```json
 {
   "id": "uuid",
   "items": [
@@ -81,63 +103,158 @@ Order model
   "createdAt": "timestamp",
   "updatedAt": "timestamp"
 }
-Installation
+```
+
+---
+
+## Installation
 
 Install dependencies:
 
+```bash
 npm install
+```
 
 Run in development mode:
 
+```bash
 npm run dev
+```
 
 Build project:
 
+```bash
 npm run build
+```
 
 Run compiled version:
 
+```bash
 npm start
-API Endpoints
-Health check
+```
+
+---
+
+## API Endpoints
+
+### Health Check
+
+```
 GET /health
-Create order
+```
+
+---
+
+### Create Order
+
+```
 POST /orders
-Get all orders
+```
+
+Creates a new order after validating stock with the Products Service.
+
+---
+
+### Get All Orders
+
+```
 GET /orders
-Get order by ID
+```
+
+Returns all orders stored in the database.
+
+---
+
+### Get Order by ID
+
+```
 GET /orders/:id
-Update order status
+```
+
+Returns a single order by its ID.
+
+Example:
+
+```
+GET /orders/7411fd9c-6227-4bed-a99d-b98c1d9e220a
+```
+
+---
+
+### Update Order Status
+
+```
 PUT /orders/:id/status
-Order Statuses
-
-Supported statuses:
-
-PENDING
-CONFIRMED
-PAID
-CANCELLED
-
-Typical flow:
-
-Order created → CONFIRMED → PAID
-Integration with Products Service
-
-Orders Service communicates with Products Service via REST API.
-
-Validate stock
-GET /products/:id
-Decrease stock
-PUT /products/:id/stock
+```
 
 Request body:
 
+```json
+{
+  "status": "PAID"
+}
+```
+
+---
+
+## Order Statuses
+
+Supported statuses:
+
+- PENDING
+- CONFIRMED
+- PAID
+- CANCELLED
+
+### Typical Order Flow
+
+```
+Order created → CONFIRMED → PAID
+```
+
+---
+
+## Integration with Products Service
+
+Orders Service communicates with **Products Service** via REST API.
+
+### Validate Stock
+
+```
+GET /products/:id
+```
+
+This call retrieves product details and verifies if enough stock is available.
+
+---
+
+### Decrease Stock
+
+```
+PUT /products/:id/stock
+```
+
+Request body:
+
+```json
 {
   "quantity": 2
 }
-Example Request
-Create order
+```
+
+This endpoint is called after order confirmation to update inventory.
+
+---
+
+## Example Requests
+
+### Create Order
+
+```
 POST /orders
+```
+
+```json
 {
   "items": [
     {
@@ -146,75 +263,100 @@ POST /orders
     }
   ]
 }
-Update order status
+```
+
+---
+
+### Update Order Status
+
+```
 PUT /orders/:id/status
+```
+
+```json
 {
   "status": "PAID"
 }
-Error Handling
+```
+
+---
+
+## Error Handling
 
 Examples of handled errors:
 
-invalid order data
+- invalid order data
+- product not found
+- insufficient stock
+- invalid order status
+- payment rejected
 
-product not found
+Example error response:
 
-insufficient stock
-
-invalid order status
-
-payment rejected
-
-Example response:
-
+```json
 {
   "error": "OUT_OF_STOCK",
   "message": "Not enough stock for product: p1"
 }
-Testing
+```
+
+---
+
+## Testing
 
 Run unit tests with coverage:
 
+```bash
 npm test
-Coverage
+```
 
-Statements: 80%+
+### Coverage
 
-Lines: 80%+
+- Statements: **80%+**
+- Lines: **80%+**
 
-The service meets the required 80% unit test coverage.
+The service meets the required **80% unit test coverage**.
 
-Docker
+---
+
+## Docker
 
 Build Docker image:
 
+```bash
 docker build -t orders-service .
+```
 
 Run container:
 
+```bash
 docker run -p 3002:3002 orders-service
-Postman Collection
+```
+
+---
+
+## Postman Collection
 
 A Postman collection is included in the repository:
 
+```
 Orders Service API.postman_collection.json
+```
 
 It contains:
 
-valid order creation
+- valid order creation
+- order retrieval
+- order status update
+- invalid item scenario
+- out of stock scenario
 
-order retrieval
+---
 
-order status update
+## Notes
 
-invalid item scenario
-
-out of stock scenario
-
-Notes
-
-Orders Service depends on Products Service.
+Orders Service depends on **Products Service**.
 
 Products Service must be running for order creation to work locally.
 
-This service demonstrates microservice-to-microservice communication using REST.
+This service demonstrates **microservice-to-microservice communication using REST**.
